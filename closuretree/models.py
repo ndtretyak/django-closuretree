@@ -54,13 +54,15 @@ def create_closure_model(cls):
     closure_cls_name = '%sClosure' % cls.__name__
     parent_field = models.ForeignKey(
         cls.__name__,
-        related_name=cls.closure_parentref()
+        related_name=cls.closure_parentref(),
+        on_delete=models.CASCADE,
     )
     model = type(closure_cls_name, (models.Model,), {
         'parent': parent_field,
         'child': models.ForeignKey(
             cls.__name__,
-            related_name=cls.closure_childref()
+            related_name=cls.closure_childref(),
+            on_delete=models.CASCADE,
         ),
         'depth': models.IntegerField(),
         '__module__':   cls.__module__,
