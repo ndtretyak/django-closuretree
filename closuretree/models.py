@@ -203,7 +203,7 @@ class ClosureModel(with_metaclass(ClosureModelBase, models.Model)):
         return result
 
     def _closure_createlink(self):
-        self._default_manager.closure_createlink(self.pk, self._closure_parent_pk)
+        self.__class__._default_manager.closure_createlink(self.pk, self._closure_parent_pk)
 
     def get_ancestors(self, include_self=False, depth=None):
         """Return all the ancestors of this object."""
@@ -316,7 +316,7 @@ def closure_model_save(sender, **kwargs):
         create = kwargs['created']
         if instance._closure_change_check():
             # Changed parents
-            instance._default_manager.closure_update_links(
+            instance.__class__._default_manager.closure_update_links(
                 instance, instance._closure_parent, instance._closure_old_parent
             )
             delattr(instance, "_closure_old_parent")
